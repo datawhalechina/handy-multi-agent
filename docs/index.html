@@ -1,43 +1,282 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Handy Multi Agent 教程</title>
+  <title>Handy Multi Agent Tutorial</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Handy Multi Agent 教程 - 一套专为深入了解并实践多智能体系统的开发者设计的实用指南">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/docsify@4/themes/vue.css">
+  <meta name="description"
+    content="Handy Multi Agent Tutorial - A practical guide for developers to deeply understand and practice multi-agent systems">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@latest/lib/themes/vue.css">
+  <style>
+    /* Language Switch Button */
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 999;
+    }
+
+    .lang-switch button {
+      background: #42b983;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .lang-switch button:hover {
+      background: #33a06f;
+    }
+
+    /* Dark Mode Styles */
+    /* 暗黑模式样式 */
+    :root {
+      --dark-bg: #1a1a1a;
+      --dark-text: #c4c4c4;
+      --dark-sidebar: #141414;
+      --dark-code-bg: #2b2b2b;
+      --dark-border: #333;
+      --theme-color: #42b983;
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    body.dark-mode .sidebar {
+      background-color: var(--dark-sidebar);
+      border-right: 1px solid var(--dark-border);
+      color: var(--dark-text);
+    }
+
+    body.dark-mode .sidebar-nav li a {
+      color: #999;
+    }
+
+    body.dark-mode .sidebar-nav li.active>a {
+      color: var(--theme-color);
+      border-right: 2px solid var(--theme-color);
+    }
+
+    body.dark-mode pre {
+      background-color: var(--dark-code-bg) !important;
+    }
+
+    body.dark-mode code {
+      background-color: var(--dark-code-bg) !important;
+      color: #e0e0e0 !important;
+    }
+
+    body.dark-mode .markdown-section code {
+      color: #f08d49;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3,
+    body.dark-mode h4 {
+      color: #e0e0e0;
+    }
+
+    body.dark-mode blockquote {
+      color: #999;
+      background: rgba(255, 255, 255, 0.05);
+      border-left-color: var(--theme-color);
+    }
+
+    body.dark-mode .markdown-section tr:nth-child(2n) {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    body.dark-mode .markdown-section td,
+    body.dark-mode .markdown-section th {
+      border-color: var(--dark-border);
+    }
+
+    /* 侧边栏开关按钮样式 */
+    .sidebar-toggle-btn {
+      cursor: pointer;
+      display: block;
+      text-align: center;
+      padding: 10px 0;
+      margin: 0 15px 10px 15px;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 0.05);
+      color: #505d6b;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+    }
+
+    body.dark-mode .sidebar-toggle-btn {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ccc;
+      border: 1px solid #444;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background-color: var(--theme-color);
+      color: white;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="lang-switch">
+    <button id="langBtn" onclick="switchLanguage()">中文</button>
+  </div>
   <div id="app"></div>
   <script>
     window.$docsify = {
-      name: '',
-      repo: 'datawhalechina/handy-multi-agent',
+      name: 'Handy Multi Agent',
+      repo: 'https://github.com/datawhalechina/handy-multi-agent',
       loadSidebar: true,
-      subMaxLevel: 3,
       auto2top: true,
-      basePath: '/handy-multi-agent/',
+      subMaxLevel: 3,
+      relativePath: false,
+      alias: {
+        '/zh/(.*)': '/$1',
+        '/zh/_sidebar.md': '/_sidebar.md',
+        '/_sidebar.md': '/_sidebar_en.md',
+      },
+      pagination: {
+        previousText: 'Previous',
+        nextText: 'Next',
+      },
       search: {
         maxAge: 86400000,
         paths: 'auto',
-        placeholder: '搜索',
-        noData: '找不到结果',
+        placeholder: 'Search',
+        noData: 'No Results',
         depth: 6
       },
-      count:{
-        countable:true,
-        fontsize:'0.9em',
-        color:'rgb(90,90,90)',
-        language:'chinese'
-      }
+      count: {
+        countable: true,
+        fontsize: '0.9em',
+        color: 'rgb(90,90,90)',
+        language: 'english'
+      },
+      plugins: [
+        function (hook, vm) {
+          // Language switch functionality
+          hook.beforeEach(function (content) {
+            const currentHash = window.location.hash;
+            const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
+
+            // Update pagination and UI text based on language
+            if (currentHash.includes('/zh/') || preferredLang === 'zh') {
+              window.$docsify.pagination.previousText = '上一章节';
+              window.$docsify.pagination.nextText = '下一章节';
+              window.$docsify.search.placeholder = '搜索';
+              window.$docsify.search.noData = '找不到结果';
+            } else {
+              window.$docsify.pagination.previousText = 'Previous';
+              window.$docsify.pagination.nextText = 'Next';
+              window.$docsify.search.placeholder = 'Search';
+              window.$docsify.search.noData = 'No Results';
+            }
+
+            return content;
+          });
+
+          // Dark mode toggle button
+          hook.doneEach(function () {
+            const sidebar = document.querySelector('.sidebar-nav');
+            if (!sidebar || document.querySelector('.sidebar-toggle-btn')) return;
+
+            const btn = document.createElement('div');
+            btn.className = 'sidebar-toggle-btn';
+
+            const savedTheme = localStorage.getItem('theme-mode');
+            const currentHash = window.location.hash;
+            const isZh = currentHash.includes('/zh/') || localStorage.getItem('preferredLanguage') === 'zh';
+
+            if (savedTheme === 'dark') {
+              document.body.classList.add('dark-mode');
+              btn.textContent = isZh ? '🌙 切换到浅色模式' : '🌙 Switch to Light';
+            } else {
+              btn.textContent = isZh ? '☀️ 切换到深色模式' : '☀️ Switch to Dark';
+            }
+
+            btn.onclick = function () {
+              document.body.classList.toggle('dark-mode');
+              const isDark = document.body.classList.contains('dark-mode');
+              const isZh = window.location.hash.includes('/zh/') || localStorage.getItem('preferredLanguage') === 'zh';
+
+              localStorage.setItem('theme-mode', isDark ? 'dark' : 'light');
+              btn.textContent = isDark
+                ? (isZh ? '🌙 切换到浅色模式' : '🌙 Switch to Light')
+                : (isZh ? '☀️ 切换到深色模式' : '☀️ Switch to Dark');
+            };
+
+            sidebar.insertBefore(btn, sidebar.firstChild);
+          });
+        }
+      ]
     }
+
+    // Language switch function
+    function switchLanguage() {
+      const currentHash = window.location.hash;
+      const langBtn = document.getElementById('langBtn');
+
+      if (currentHash.includes('/zh/')) {
+        // Switch to English
+        localStorage.setItem('preferredLanguage', 'en');
+        let newHash = currentHash.replace('/zh/', '/');
+        window.location.hash = newHash || '#/README_EN.md';
+        langBtn.textContent = '中文';
+      } else {
+        // Switch to Chinese
+        localStorage.setItem('preferredLanguage', 'zh');
+        let path = currentHash.replace('#/', '');
+
+        if (path === '' || path === '/' || path === 'README_EN.md') {
+          window.location.hash = '#/zh/README.md';
+        } else {
+          path = path.replace('README_EN.md', 'README.md');
+          window.location.hash = '#/zh/' + path;
+        }
+        langBtn.textContent = 'English';
+      }
+
+      setTimeout(() => window.location.reload(), 100);
+    }
+
+    // Initialize language on page load
+    window.addEventListener('load', function () {
+      const currentHash = window.location.hash;
+      const langBtn = document.getElementById('langBtn');
+      const preferredLang = localStorage.getItem('preferredLanguage');
+
+      if (!preferredLang) {
+        localStorage.setItem('preferredLanguage', 'en');
+      }
+
+      if (currentHash.includes('/zh/') || preferredLang === 'zh') {
+        langBtn.textContent = 'English';
+      } else {
+        langBtn.textContent = '中文';
+      }
+    });
   </script>
-  <!-- Docsify v4 -->
-  <script src="https://unpkg.com/docsify@4"></script>
-  <script src="https://unpkg.com/docsify/lib/plugins/search.min.js"></script>
-  <script src="https://unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
-  <script src="https://unpkg.com/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script src="https://unpkg.com/docsify-count/dist/countable.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@latest/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@latest/components/prism-bash.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@latest/components/prism-python.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination@latest/dist/docsify-pagination.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
 </body>
-</html> 
+
+</html>

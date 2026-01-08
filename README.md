@@ -133,7 +133,7 @@ handy-multi-agent/
 
 ### 安装CAMEL
 ```bash
-pip install "camel-ai[all]==0.2.38"
+pip install "camel-ai[all]"
 ```
 
 ### 学习步骤
