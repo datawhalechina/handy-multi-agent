@@ -146,7 +146,7 @@ pip install "camel-ai[all]"
 
 完整教程内容可访问以下链接之一查看：
 - **GitHub Pages**: [https://datawhalechina.github.io/handy-multi-agent/](https://datawhalechina.github.io/handy-multi-agent/)
-- **飞书文档**: [https://fmhw1n4zpn.feishu.cn/docx/AF4XdOZpIo6TOaxzDK8cxInNnCe](https://fmhw1n4zpn.feishu.cn/docx/AF4XdOZpIo6TOaxzDK8cxInNnCe)
+- **飞书文档（中文版）**: [https://fmhw1n4zpn.feishu.cn/docx/AF4XdOZpIo6TOaxzDK8cxInNnCe](https://fmhw1n4zpn.feishu.cn/docx/AF4XdOZpIo6TOaxzDK8cxInNnCe)
 
 
 ## 📅 Roadmap
@@ -155,7 +155,7 @@ pip install "camel-ai[all]"
 - [x] 飞书内容迁移仓库
 - [x] 更新案例源代码文件
 - [x] 发布第一版内容公测
-- [ ] 重构教程结构，系统整理化agent发展历程，补充更多实例和新特性讲解，更新camel版本到制作时最新
+- [x] 重构教程结构，系统整理化agent发展历程，补充更多实例和新特性讲解，更新camel版本到制作时最新
 
 ## 🧑‍💻 参与贡献
 
