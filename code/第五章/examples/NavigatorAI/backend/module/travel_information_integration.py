@@ -8,6 +8,7 @@ from typing import List, Dict, Any
 from flask import Flask, request, jsonify
 import json
 import os
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -67,18 +68,19 @@ class TravelPlanner:
     def extract_json_from_response(self,response_content: str) -> List[Dict[str, Any]]:
             """从LLM响应中提取JSON内容"""
             try:
-                # 找到JSON内容的开始和结束位置
-                start = response_content.find('```json\n') + 8
-                end = response_content.find('\n```', start)
-                if start == -1 or end == -1:
-                    print("未找到JSON内容的标记")
-                    return []
-                
-                json_str = response_content[start:end].strip()
-                print(f"提取的JSON字符串: {json_str}")  # 调试信息
-                
-                # 解析 JSON 字符串
-                parsed = json.loads(json_str)
+                # 优先解析裸 JSON，避免修改 JSON 字符串中的代码块标记。
+                try:
+                    parsed = json.loads(response_content)
+                except json.JSONDecodeError:
+                    # 同时兼容模型返回的 JSON 代码块（LF 或 CRLF 换行）。
+                    match = re.search(
+                        r'```json[ \t]*\r?\n(.*?)\r?\n```',
+                        response_content,
+                        re.DOTALL,
+                    )
+                    if match is None:
+                        raise
+                    parsed = json.loads(match.group(1))
                 
                 # 处理不同的JSON结构
                 if isinstance(parsed, dict) and "related_results" in parsed:
