@@ -47,6 +47,7 @@ class MySearchToolkit(SearchToolkit):
             except RequestException as e:
                 # Handle specific exceptions or general request exceptions
                 responses.append({"error": f"duckduckgo search failed.{e}"})
+                return responses
 
             # Iterate over results found
             for i, result in enumerate(results, start=1):
@@ -67,6 +68,7 @@ class MySearchToolkit(SearchToolkit):
             except RequestException as e:
                 # Handle specific exceptions or general request exceptions
                 responses.append({"error": f"duckduckgo search failed.{e}"})
+                return responses
 
             # Iterate over results found
             for i, result in enumerate(results, start=1):
@@ -88,6 +90,7 @@ class MySearchToolkit(SearchToolkit):
             except RequestException as e:
                 # Handle specific exceptions or general request exceptions
                 responses.append({"error": f"duckduckgo search failed.{e}"})
+                return responses
 
             # Iterate over results found
             for i, result in enumerate(results, start=1):
